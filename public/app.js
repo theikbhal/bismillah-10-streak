@@ -1,17 +1,24 @@
 const BENEFITS = [
-  "Every deed that begins with the Basmala becomes blessed. — Starting with Allah's name invites divine blessing into the action.",
-  "The Basmala is the key to the door of mercy and peace. — It opens the heart to ar-Rahman and ar-Rahim.",
-  "By mentioning Allah's name, one attains Divine care and protection. — A shield for the day ahead.",
-  "The believer finds peace in the remembrance of Allah. — Anxiety is calmed through His name.",
-  "Every word that begins with the Basmala becomes auspicious. — Speech and action are elevated.",
-  "Bismillah connects the servant to the Sustainer. — No action is too small when it starts with His name.",
-  "It is a declaration of dependence on Allah alone. — True strength begins with humility.",
-  "The name of Allah placed before an act purifies intention. — The heart is reminded of its purpose.",
-  "Bismillah brings barakah into time itself. — Moments become meaningful when dedicated to Him.",
-  "It is the sunnah of the Prophets. — To begin every affair with the name of Allah is a timeless practice."
+  "Every deed that begins with the Basmala becomes blessed.",
+  "The Basmala is the key to the door of mercy and peace.",
+  "By mentioning Allah's name, one attains Divine care and protection.",
+  "The believer finds peace in the remembrance of Allah.",
+  "Every word that begins with the Basmala becomes auspicious.",
+  "Bismillah connects the servant to the Sustainer.",
+  "It is a declaration of dependence on Allah alone.",
+  "The name of Allah placed before an act purifies intention.",
+  "Bismillah brings barakah into time itself.",
+  "It is the sunnah of the Prophets — begin every affair with His name.",
 ];
 
-const TOTAL_DAYS = 10;
+let state = {
+  userId: null,
+  currentStreak: 0,
+  longestStreak: 0,
+  totalDays: 0,
+  todayCount: 0,
+  lifetimeCount: 0,
+};
 
 function getUserId() {
   let id = localStorage.getItem("bismillah_user_id");
@@ -22,56 +29,88 @@ function getUserId() {
   return id;
 }
 
-function renderDots(streak) {
-  const dots = document.getElementById("dots");
-  dots.innerHTML = "";
-  for (let i = 0; i < TOTAL_DAYS; i++) {
-    const d = document.createElement("div");
-    d.className = "dot" + (i < streak ? " filled" : "");
-    dots.appendChild(d);
+function render() {
+  document.getElementById("currentStreak").textContent = state.currentStreak;
+  document.getElementById("todayCount").textContent = state.todayCount;
+  document.getElementById("lifetimeCount").textContent =
+    state.lifetimeCount > 999 ? (state.lifetimeCount / 1000).toFixed(1) + "k" : state.lifetimeCount;
+
+  const visual = document.getElementById("todayVisual");
+  visual.innerHTML = "";
+  // Show up to 60 beads, then a "+N" chip
+  const shown = Math.min(state.todayCount, 60);
+  for (let i = 0; i < shown; i++) {
+    const b = document.createElement("div");
+    b.className = "bead";
+    visual.appendChild(b);
   }
-  document.getElementById("current").textContent = streak;
+  if (state.todayCount > 60) {
+    const chip = document.createElement("div");
+    chip.className = "bead";
+    chip.style.background = "var(--mid-green)";
+    chip.style.color = "var(--gold-soft)";
+    chip.style.display = "grid";
+    chip.style.placeItems = "center";
+    chip.style.fontSize = "9px";
+    chip.style.fontWeight = "800";
+    chip.textContent = "+" + (state.todayCount - 60);
+    visual.appendChild(chip);
+  }
 }
 
-async function loadStreak() {
+function showBenefit() {
+  const idx = state.totalDays % BENEFITS.length;
+  document.getElementById("benefitText").textContent = BENEFITS[idx];
+}
+
+async function load() {
   try {
-    const res = await fetch(`/api/streak?userId=${encodeURIComponent(getUserId())}`);
+    const res = await fetch(`/api/streak?userId=${encodeURIComponent(state.userId)}`);
     const data = await res.json();
-    const streak = data.success && data.data[0] ? data.data[0].current_streak : 0;
-    renderDots(streak % TOTAL_DAYS);
-    if (data.success && data.data[0]?.last_checkin === todayStr()) {
-      document.getElementById("checkinBtn").disabled = true;
-      document.getElementById("checkinBtn").textContent = "✓ Already checked in today";
+    if (data.success && data.data[0]) {
+      const r = data.data[0];
+      state.currentStreak = r.current_streak;
+      state.longestStreak = r.longest_streak;
+      state.totalDays = r.total_days;
+      state.todayCount = r.today_count;
+      state.lifetimeCount = r.lifetime_count;
+      if (state.todayCount > 0) showBenefit();
     }
-  } catch {
-    renderDots(0);
+    render();
+  } catch (e) {
+    console.error("load failed", e);
+    render();
   }
 }
 
-function todayStr() {
-  return new Date().toISOString().slice(0, 10);
-}
-
-async function checkIn() {
-  const btn = document.getElementById("checkinBtn");
-  btn.disabled = true;
+async function add(amount) {
+  document.querySelectorAll(".quick").forEach((b) => (b.disabled = true));
   try {
     const res = await fetch("/api/streak", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: getUserId() }),
+      body: JSON.stringify({ userId: state.userId, amount }),
     });
     const data = await res.json();
     if (data.success) {
-      renderDots(data.current_streak % TOTAL_DAYS);
-      document.getElementById("benefitText").textContent =
-        BENEFITS[data.total_days % BENEFITS.length];
-      btn.textContent = "✓ Checked in — come back tomorrow";
+      state.currentStreak = data.current_streak;
+      state.longestStreak = data.longest_streak;
+      state.totalDays = data.total_days;
+      state.todayCount = data.today_count;
+      state.lifetimeCount = data.lifetime_count;
+      showBenefit();
+      render();
     }
-  } catch {
-    btn.disabled = false;
+  } catch (e) {
+    console.error("add failed", e);
+  } finally {
+    document.querySelectorAll(".quick").forEach((b) => (b.disabled = false));
   }
 }
 
-document.getElementById("checkinBtn").addEventListener("click", checkIn);
-loadStreak();
+document.querySelectorAll(".quick").forEach((btn) => {
+  btn.addEventListener("click", () => add(Number(btn.dataset.amount)));
+});
+
+state.userId = getUserId();
+load();

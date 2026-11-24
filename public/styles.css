@@ -1,64 +1,217 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --deep-green: #0b3d2e;
+  --mid-green: #10573f;
+  --gold: #d4af37;
+  --gold-soft: #f0d77b;
+  --cream: #fdf6e3;
+  --shadow: rgba(0, 0, 0, 0.25);
+}
+
+html, body { min-height: 100%; }
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: linear-gradient(135deg, #0f5c3f 0%, #1a7a55 100%);
-  min-height: 100vh;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: radial-gradient(circle at 50% 0%, var(--mid-green), var(--deep-green) 70%);
+  color: var(--cream);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  padding: 20px;
+  padding: 24px;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
 }
+
+/* Subtle Islamic geometric pattern overlay */
+.pattern-bg {
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(212, 175, 55, 0.08) 0, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.08) 0, transparent 40%),
+    repeating-conic-gradient(from 0deg at 50% 50%,
+      rgba(212, 175, 55, 0.03) 0deg 15deg,
+      transparent 15deg 30deg);
+  pointer-events: none;
+  z-index: 0;
+}
+
 .app {
-  max-width: 420px;
+  position: relative;
+  z-index: 1;
+  max-width: 520px;
   width: 100%;
   text-align: center;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
-  padding: 32px 24px;
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
 }
-h1 { font-size: 22px; margin-bottom: 8px; font-weight: 600; }
-.subtitle { font-size: 14px; opacity: 0.8; margin-bottom: 28px; }
-.streak-dots {
-  display: flex; justify-content: center; gap: 10px;
-  margin-bottom: 16px; flex-wrap: wrap;
+
+/* ===== Hero ===== */
+.hero {
+  margin-bottom: 28px;
+  padding: 24px 16px;
 }
-.dot {
-  width: 24px; height: 24px; border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  transition: all 0.3s ease;
+
+.ornament {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 14px auto;
+  width: 80%;
+  position: relative;
 }
-.dot.filled {
-  background: #ffd166;
-  border-color: #ffd166;
-  box-shadow: 0 0 12px rgba(255, 209, 102, 0.7);
+.ornament::after {
+  content: "✦";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--gold);
+  background: var(--deep-green);
+  padding: 0 10px;
+  font-size: 12px;
 }
-.streak-count { font-size: 18px; margin-bottom: 24px; font-weight: 600; }
-.checkin {
-  background: #ffd166;
-  color: #0f5c3f;
-  border: none;
-  padding: 14px 32px;
-  border-radius: 999px;
-  font-size: 16px;
+
+.bismillah {
+  font-family: "Amiri", serif;
+  font-size: clamp(28px, 6vw, 42px);
+  line-height: 1.6;
+  color: var(--gold-soft);
+  text-shadow: 0 2px 12px rgba(212, 175, 55, 0.4);
+  direction: rtl;
   font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  width: 100%;
+  margin: 8px 0;
 }
-.checkin:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 209, 102, 0.4); }
-.checkin:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-.benefit-card {
-  margin-top: 24px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 16px;
-  padding: 18px;
-  font-size: 14px;
-  line-height: 1.5;
-  min-height: 72px;
+
+.translation {
+  font-size: 13px;
+  color: rgba(253, 246, 227, 0.7);
+  font-style: italic;
+  letter-spacing: 0.3px;
+}
+
+/* ===== Streak card ===== */
+.streak-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 20px;
+  padding: 22px 16px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 28px var(--shadow);
+}
+
+.streak-row {
   display: flex;
   align-items: center;
+  justify-content: space-around;
+}
+
+.stat { display: flex; flex-direction: column; gap: 4px; }
+.stat-value {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--gold-soft);
+  line-height: 1;
+  text-shadow: 0 2px 8px rgba(212, 175, 55, 0.35);
+}
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: rgba(253, 246, 227, 0.6);
+}
+
+.divider {
+  width: 1px;
+  height: 36px;
+  background: rgba(212, 175, 55, 0.25);
+}
+
+/* ===== Counter ===== */
+.counter { margin-bottom: 24px; }
+
+.prompt {
+  font-size: 15px;
+  color: rgba(253, 246, 227, 0.85);
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.quick-buttons {
+  display: flex;
+  gap: 10px;
   justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.quick {
+  flex: 1 1 0;
+  min-width: 64px;
+  max-width: 90px;
+  padding: 16px 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--deep-green);
+  background: linear-gradient(180deg, var(--gold-soft), var(--gold));
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #8a6f1e, 0 6px 16px rgba(0, 0, 0, 0.3);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.quick:hover { transform: translateY(-2px); }
+.quick:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #8a6f1e, 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.quick:disabled { opacity: 0.5; cursor: wait; transform: none; }
+
+/* Today's visual dots */
+.today-visual {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  min-height: 32px;
+}
+.bead {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, var(--gold-soft), var(--gold) 60%, #8a6f1e);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+  animation: pop 0.25s ease;
+}
+@keyframes pop {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ===== Benefit card ===== */
+.benefit-card {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid var(--gold);
+  border-radius: 12px;
+  padding: 18px 20px;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.55;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.foot {
+  font-size: 12px;
+  color: rgba(253, 246, 227, 0.4);
+  text-align: center;
+  font-family: "Amiri", serif;
+}
+
+/* Mobile tweaks */
+@media (max-width: 400px) {
+  .quick { min-width: 54px; font-size: 16px; }
+  .stat-value { font-size: 26px; }
 }

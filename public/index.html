@@ -3,23 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bismillah Daily Streak 10</title>
+  <title>Bismillah Daily Streak</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
 </head>
 <body>
+  <div class="pattern-bg"></div>
+
   <main class="app">
-    <h1>بسم الله الرحمن الرحيم</h1>
-    <p class="subtitle">Bismillah Daily Streak — 10 Days</p>
+    <!-- Big Bismillah header -->
+    <header class="hero">
+      <div class="ornament top"></div>
+      <h1 class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h1>
+      <p class="translation">In the name of Allah, the Most Gracious, the Most Merciful</p>
+      <div class="ornament bottom"></div>
+    </header>
 
-    <div class="streak-dots" id="dots"></div>
-    <p class="streak-count"><span id="current">0</span> / 10</p>
+    <!-- Streak card -->
+    <section class="streak-card">
+      <div class="streak-row">
+        <div class="stat">
+          <span class="stat-value" id="currentStreak">0</span>
+          <span class="stat-label">Day Streak</span>
+        </div>
+        <div class="divider"></div>
+        <div class="stat">
+          <span class="stat-value" id="todayCount">0</span>
+          <span class="stat-label">Today</span>
+        </div>
+        <div class="divider"></div>
+        <div class="stat">
+          <span class="stat-value" id="lifetimeCount">0</span>
+          <span class="stat-label">Lifetime</span>
+        </div>
+      </div>
+    </section>
 
-    <button id="checkinBtn" class="checkin">✓ Check in today</button>
+    <!-- Counter controls -->
+    <section class="counter">
+      <p class="prompt">How many Bismillah today?</p>
+      <div class="quick-buttons">
+        <button class="quick" data-amount="1">+1</button>
+        <button class="quick" data-amount="3">+3</button>
+        <button class="quick" data-amount="10">+10</button>
+        <button class="quick" data-amount="30">+30</button>
+        <button class="quick" data-amount="100">+100</button>
+      </div>
+      <div class="today-visual" id="todayVisual"></div>
+    </section>
 
-    <div class="benefit-card" id="benefitCard">
-      <p id="benefitText">Tap the button to begin your streak.</p>
-    </div>
+    <!-- Benefit / reminder -->
+    <section class="benefit-card">
+      <p id="benefitText">Begin with the name of Allah — every count is a blessing.</p>
+    </section>
+
+    <footer class="foot">
+      <p>﷽ · May Allah accept every remembrance</p>
+    </footer>
   </main>
+
   <script src="app.js"></script>
 </body>
 </html>
