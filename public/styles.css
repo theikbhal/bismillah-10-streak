@@ -1,0 +1,64 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #0f5c3f 0%, #1a7a55 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  padding: 20px;
+}
+.app {
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 32px 24px;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+h1 { font-size: 22px; margin-bottom: 8px; font-weight: 600; }
+.subtitle { font-size: 14px; opacity: 0.8; margin-bottom: 28px; }
+.streak-dots {
+  display: flex; justify-content: center; gap: 10px;
+  margin-bottom: 16px; flex-wrap: wrap;
+}
+.dot {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+.dot.filled {
+  background: #ffd166;
+  border-color: #ffd166;
+  box-shadow: 0 0 12px rgba(255, 209, 102, 0.7);
+}
+.streak-count { font-size: 18px; margin-bottom: 24px; font-weight: 600; }
+.checkin {
+  background: #ffd166;
+  color: #0f5c3f;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  width: 100%;
+}
+.checkin:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 209, 102, 0.4); }
+.checkin:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.benefit-card {
+  margin-top: 24px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 18px;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

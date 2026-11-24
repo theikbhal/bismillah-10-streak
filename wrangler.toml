@@ -1,0 +1,8 @@
+name = "bismillah-10-streak"
+pages_build_output_dir = "./public"
+compatibility_date = "2026-11-24"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bismillah-streak-db"
+database_id = "f33b98d3-edaa-462b-a3cf-0119eba3d7b2"
