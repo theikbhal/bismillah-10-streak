@@ -3,5 +3,8 @@ CREATE TABLE IF NOT EXISTS streaks (
   current_streak INTEGER DEFAULT 0,
   longest_streak INTEGER DEFAULT 0,
   last_checkin TEXT,
-  total_days INTEGER DEFAULT 0
+  total_days INTEGER DEFAULT 0,
+  today_count INTEGER DEFAULT 0,
+  today_date TEXT,
+  lifetime_count INTEGER DEFAULT 0
 );
